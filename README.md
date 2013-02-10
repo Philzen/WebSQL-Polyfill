@@ -18,10 +18,10 @@ Then, simply include the script in your html:
 
     <script src="{target_folder}/websql-polyfill.js" type="text/javascript" ></script>  
 
-WebSQL-Polyfill loads the dependency script into the DOM on-demand given that:  
+WebSQL-Polyfill lazy-loads the dependency script into the DOM on-demand given that:  
 
-a. window.openDatabase is not defined
-b. you have actually called window.openDatabase
+a. window.openDatabase is not defined  
+b. you are actually calling window.openDatabase at least once  
 
 Otherwise, nothing will be loaded, executed and polyfilled, as there is no need for it in those cases.
 
