@@ -5,8 +5,8 @@ Polyfill for browsers lacking WebSQL implementation (i.e. Firefox &amp; IE)
 
 ## Purpose
 
-Simply put, imagine you an application at hand that uses web sql storage methods, such as those found in the [Cordova Storage API](http://docs.phonegap.com/en/2.3.0/cordova_storage_storage.md.html#Storage).
-This project tries to make these kinds of projects run- and testable on Firefox and IE.
+Simply put, imagine an application at hand that uses web sql storage methods, such as those found in the [Cordova Storage API](http://docs.phonegap.com/en/2.3.0/cordova_storage_storage.md.html#Storage).
+This Polyfill helps with making it run- and testable on Firefox and IE.
 
 ## Usage
 
@@ -16,13 +16,19 @@ Clone the project recursively in order to get the depending sql.js code:
 
 Then, simply include the script in your html:
 
-	<script src="{target_folder}/websql-polyfill.js" type="text/javascript" ></script>
+    <script src="{target_folder}/websql-polyfill.js" type="text/javascript" ></script>  
 
+WebSQL-Polyfill loads the dependency script into the DOM on-demand given that:  
+
+a. window.openDatabase is not defined
+b. you have actually called window.openDatabase
+
+Otherwise, nothing will be loaded, executed and polyfilled, as there is no need for it in those cases.
 
 ## Current known limitations
 
 - Datastore is not persisted during requests
-- Though asynchronous websql API is adapted, currently everthing executes in a synchronous manner
+- Though asynchronous websql API is adapted, currently everything executes in a synchronous manner
 
 ## ToDos / Roadmap
 
