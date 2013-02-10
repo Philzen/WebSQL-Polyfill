@@ -39,7 +39,7 @@ if (typeof window.openDatabase === 'undefined')
 				if (req.readyState == 4) { // only if req is "loaded"
 					document.body.appendChild(js);
 					if (req.status == 200 || req.status == 0) { // only if "OK"
-						js.innerHTML = '(function() { ' + req.responseText + ' window._WebSqlJs = SQL})(window);';
+						js.innerHTML = '(function() { var inner = function() {' + req.responseText + '}; window._WebSqlJs = new inner().SQL})(window);';
 					} else {
 						alert('could not load SQL.js lib!');
 					}
