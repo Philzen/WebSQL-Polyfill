@@ -48,23 +48,77 @@ if (typeof window.openDatabase === 'undefined')
 			load(basePath + 'sql.js/sql.js');
 		}
 
+		var db = null;
+
+		var SQLResultSetRowList = function(data) {
+			var rows = [];
+			if (data) {
+				rows = data;
+			}
+			this.length = rows.length;
+			this.item = function(index) {
+				return rows[index];
+			}
+		};
+
+		/**
+		 * Implementation of SQL Transaction object
+		 * @returns {SQLTransaction}
+		 */
+		var SQLResultSet = function() {
+			this.insertId = null,
+					this.rows = null,
+					this.rowsAffected = null;
+		};
+
+		/**
+		 * Implementation of SQL Transaction object
+		 * @returns {SQLTransaction}
+		 */
 		var SQLTransaction = function() {
+			var hadErrors = false;
 			this.executeSql = function(sql, bindVars, successCallback, errorCallback) {
-				console.log('about to execute command: ' + sql);
+				try {
+					var data = db.exec(sql, bindVars);
+					var resultSet = new SQLResultSet();
+					resultSet.rows = new SQLResultSetRowList(data);
+					if (successCallback)
+						successCallback(this, resultSet);
+					return resultSet;
+				} catch (e) {
+					console.log(e);
+					if (e === undefined && successCallback) {
+						successCallback(e);
+						return e;
+					}
+					else {
+							hadErrors = true;
+						if (errorCallback)
+							errorCallback(e);
+						return e;
+					}
+				}
+			}, this.hadErrors = function() {
+				return hadErrors;
 			};
 		};
 
 		var Database = function Database(name, version, description, size) {
 			sqlLoader();
-			var db = _WebSqlJs.open();
-			
+			db = _WebSqlJs.open();
+
 			this.transaction = function(transactionFunction, errorCallback, successCallback) {
 				if (arguments.length < 1)
 					throw new TypeError('Not enough arguments');
 				if (typeof transactionFunction !== 'function' || (errorCallback !== undefined && typeof errorCallback !== 'function') || (successCallback !== undefined && typeof successCallback !== 'function'))
 					throw new TypeError('At least one supplied argument is not a function');
 
-				transactionFunction(new SQLTransaction());
+				var SQLtrans = new SQLTransaction();
+				var result = transactionFunction(SQLtrans);
+				if (SQLtrans.hadErrors() && errorCallback)
+					errorCallback(result);
+				else if (successCallback)
+					successCallback(result);
 			};
 		};
 
