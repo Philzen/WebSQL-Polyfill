@@ -37,4 +37,4 @@ Otherwise, nothing will be loaded, executed and polyfilled, as there is no need 
 
 ## Acknowledgements
 
-This project currently uses [sql.js](https://github.com/kripken/sql.js) to enable easy abstraction of an SQL Lite database in memory.
+This project currently uses [sql.js](https://github.com/kripken/sql.js) to enable easy abstraction of an SQLite database in memory.
