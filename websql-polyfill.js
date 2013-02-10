@@ -16,7 +16,7 @@ if (typeof window.openDatabase === 'undefined')
 						basePath = src.substr(0, l - length);
 					}
 				}
-			})('wsp.js');
+			})('websql-polyfill.js');
 
 			var js = document.createElement("script");
 			js.type = "text/javascript";
