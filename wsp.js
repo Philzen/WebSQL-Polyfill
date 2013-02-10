@@ -48,8 +48,10 @@ if (typeof window.openDatabase === 'undefined')
 			load(basePath + 'sql.js/sql.js');
 		}
 
-		var db = null;
-
+		/**
+		 * Mock implementation of SQL ResultSetRowList object
+		 * @returns {SQLResultSet}
+		 */
 		var SQLResultSetRowList = function(data) {
 			var rows = [];
 			if (data) {
@@ -62,8 +64,8 @@ if (typeof window.openDatabase === 'undefined')
 		};
 
 		/**
-		 * Implementation of SQL Transaction object
-		 * @returns {SQLTransaction}
+		 * Mock implementation of SQL ResultSet object
+		 * @returns {SQLResultSet}
 		 */
 		var SQLResultSet = function() {
 			this.insertId = null,
@@ -72,7 +74,7 @@ if (typeof window.openDatabase === 'undefined')
 		};
 
 		/**
-		 * Implementation of SQL Transaction object
+		 * Mock implementation of SQL Transaction object
 		 * @returns {SQLTransaction}
 		 */
 		var SQLTransaction = function() {
@@ -103,6 +105,10 @@ if (typeof window.openDatabase === 'undefined')
 			};
 		};
 
+		/**
+		 * Mock implementation of Database object, which is typically returned by window.openDatabase
+		 * @returns {Database}
+		 */
 		var Database = function Database(name, version, description, size) {
 			sqlLoader();
 			db = _WebSqlJs.open();
@@ -122,6 +128,14 @@ if (typeof window.openDatabase === 'undefined')
 			};
 		};
 
+		/**
+		 * Polyfill for window.openDatabase
+		 * @param {string} name
+		 * @param {int} version
+		 * @param {string} description
+		 * @param {int} size
+		 * @returns {Database}
+		 */
 		function openDatabase(name, version, description, size) {
 			if (arguments.length < 4) {
 				throw new TypeError('Not enough arguments');
@@ -133,4 +147,3 @@ if (typeof window.openDatabase === 'undefined')
 		window.openDatabase = openDatabase;
 	})(window);
 
-console.log(typeof window.openDatabase);
